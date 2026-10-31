@@ -63,6 +63,14 @@ npm run build    # dist/ 생성 → 아무 정적 호스팅(GitHub Pages, Netlif
 
 아이패드 사파리에서 연 뒤 **공유 → 홈 화면에 추가**로 실행하면 주소창 없이 전체화면으로 뜹니다. 한 번 열어두면 오프라인 캐시가 되어 현장 와이파이가 끊겨도 동작합니다.
 
+## GitHub Pages 배포
+
+`.github/workflows/deploy.yml` 이 브랜치에 푸시될 때마다 자동으로 빌드해서 배포합니다.
+
+1. 저장소 **Settings → Pages → Build and deployment → Source** 를 **GitHub Actions** 로 바꿉니다 (처음 한 번만).
+2. **Actions** 탭에서 `Deploy to GitHub Pages` 가 초록색이 되면 `https://bomangoo.github.io/pick-a-boo/` 에서 열립니다.
+3. 첫 배포가 Source 설정 전에 실패했다면 Actions 탭에서 **Run workflow** 로 다시 실행하세요.
+
 ## 폰트
 
 - Galmuri (픽셀 폰트, SIL OFL 1.1) — quiple
