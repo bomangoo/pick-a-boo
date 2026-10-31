@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { asset, Grain, Iris, spriteUrl, Stage, SvgDefs } from './components/common'
+import { asset, Grain, Iris, spriteUrl, SvgDefs } from './components/common'
+import Console from './components/Console'
 import Title from './scenes/Title'
 import StrawberryGame from './scenes/StrawberryGame'
 import BalloonGame from './scenes/BalloonGame'
@@ -67,13 +68,13 @@ export default function App() {
   }
 
   return (
-    <Stage>
+    <Console>
       <SvgDefs />
       <div key={scene.n} className="scene">
         {view}
       </div>
       <Grain />
       <Iris closed={closed} />
-    </Stage>
+    </Console>
   )
 }

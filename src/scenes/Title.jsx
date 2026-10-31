@@ -212,7 +212,7 @@ export default function Title({ onStart, onStaff }) {
       </div>
 
       {/* 인스타 QR (은은하게) */}
-      <div data-no-tap style={{ position: 'absolute', right: 24, bottom: 18, display: 'flex', alignItems: 'center', gap: 10, zIndex: 5 }}>
+      <div style={{ position: 'absolute', right: 24, bottom: 18, display: 'flex', alignItems: 'center', gap: 10, zIndex: 5 }}>
         <div style={{ textAlign: 'right', fontSize: 14, lineHeight: 1.4, color: 'var(--ink-soft)' }}>
           {BRAND.heroName}의 다른 이야기
           <br />

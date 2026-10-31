@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { usePress } from '../input'
 import { sfx } from '../sound'
 
@@ -13,28 +13,6 @@ export function josa(word, withFinal, withoutFinal) {
   const code = word.charCodeAt(word.length - 1) - 0xac00
   const hasFinal = code >= 0 && code <= 11171 && code % 28 !== 0
   return word + (hasFinal ? withFinal : withoutFinal)
-}
-
-// ───────── 4:3 스테이지 (아이패드 가로 화면 기준 1024×768) ─────────
-export function Stage({ children }) {
-  const [scale, setScale] = useState(1)
-  useLayoutEffect(() => {
-    const fit = () => setScale(Math.min(window.innerWidth / W, window.innerHeight / H))
-    fit()
-    window.addEventListener('resize', fit)
-    window.addEventListener('orientationchange', fit)
-    return () => {
-      window.removeEventListener('resize', fit)
-      window.removeEventListener('orientationchange', fit)
-    }
-  }, [])
-  return (
-    <div className="viewport">
-      <div className="stage" style={{ transform: `scale(${scale}) translate(-50%, -50%)` }}>
-        {children}
-      </div>
-    </div>
-  )
 }
 
 // 종이 질감 노이즈 (한 번만 생성)

@@ -169,7 +169,7 @@ export default function Postcard({ result, onDone }) {
           </div>
 
           {/* 인스타 (자연스럽게) */}
-          <div data-no-tap style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ background: '#fff', padding: 5, borderRadius: 6, border: '2px solid #e2cbb3' }}>
               <QRCodeSVG value={BRAND.instagramUrl} size={70} fgColor="#5a3d33" />
             </div>

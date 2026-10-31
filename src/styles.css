@@ -60,25 +60,144 @@ img {
   pointer-events: none;
 }
 
-/* ───────── 4:3 아이패드 스테이지 ───────── */
-.viewport {
+/* ───────── 휴대용 게임기 모양 (화면 + 터치 버튼) ───────── */
+.console {
   position: fixed;
   inset: 0;
-  display: grid;
-  place-items: center;
-  background: rgba(70, 40, 35, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(160deg, #fbe7ea 0%, #f6d3d9 55%, #efc4cc 100%);
+  padding-top: env(safe-area-inset-top);
+}
+
+.bezel {
+  position: relative;
+  background: linear-gradient(#6a4a3f, #553a31);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.15),
+    0 10px 24px rgba(120, 60, 60, 0.28);
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--cream);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .stage {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1024px;
-  height: 768px;
+  left: 0;
+  top: 0;
   overflow: hidden;
   transform-origin: 0 0;
   background: var(--cream);
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
+}
+
+.bezel-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  color: #f3d9c6;
+  letter-spacing: 1px;
+}
+.bezel-label i {
+  font-style: normal;
+  opacity: 0.7;
+}
+.power-led {
+  display: inline-block;
+  border-radius: 50%;
+  background: #ff8a8a;
+  box-shadow: 0 0 8px #ff6b6b;
+  animation: led 2.4s ease-in-out infinite;
+}
+@keyframes led {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* 방향패드 */
+.dpad {
+  position: relative;
+  touch-action: none;
+  flex: none;
+}
+.dpad-ring {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background: rgba(150, 90, 90, 0.12);
+  box-shadow: inset 0 3px 8px rgba(120, 60, 60, 0.15);
+}
+.dpad-bar {
+  position: absolute;
+  background: linear-gradient(#6a4a3f, #4c332b);
+  border-radius: 14px;
+  box-shadow:
+    0 6px 0 #3a2721,
+    0 10px 16px rgba(80, 40, 40, 0.3);
+}
+.dpad-arrow {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 240, 225, 0.75);
+  border-radius: 12px;
+  transition: background 0.06s;
+}
+.dpad-arrow.on {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  transform: translateY(3px);
+}
+.dpad-center {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* A·B 버튼 */
+.round-btn {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  color: #fff7ee;
+  touch-action: none;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+.round-btn.a {
+  background: radial-gradient(circle at 35% 30%, #f6a58f, #e8826b 60%, #d46a55);
+  box-shadow:
+    0 8px 0 #b4543f,
+    0 14px 18px rgba(120, 50, 40, 0.3);
+}
+.round-btn.b {
+  background: radial-gradient(circle at 35% 30%, #b7cbe3, #8aa6c9 60%, #7690b4);
+  box-shadow:
+    0 8px 0 #5f789b,
+    0 14px 18px rgba(50, 60, 100, 0.25);
+}
+.round-btn.down {
+  transform: translateY(7px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.btn-label {
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
 }
 
 .scene {

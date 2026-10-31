@@ -41,17 +41,23 @@ function onBlur() {
   }
 }
 
-// 스태프가 화면을 탭해도 A 처럼 동작하게 합니다 (키보드가 끊겼을 때 대비).
-function onPointerDown(e) {
-  if (e.target.closest?.('[data-no-tap]')) return
-  emit('a')
+// 화면 아래 터치 버튼에서 호출합니다. 키보드와 똑같이 동작합니다.
+export function pressAction(action) {
+  if (held[action]) return
+  held[action] = true
+  heldSince[action] = performance.now()
+  emit(action)
+}
+
+export function releaseAction(action) {
+  held[action] = false
+  heldSince[action] = null
 }
 
 if (typeof window !== 'undefined') {
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('keyup', onKeyUp)
   window.addEventListener('blur', onBlur)
-  window.addEventListener('pointerdown', onPointerDown)
 }
 
 export const input = {
