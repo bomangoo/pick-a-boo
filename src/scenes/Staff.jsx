@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Key } from '../components/common'
-import { input, useFrame, usePress } from '../input'
+import { getCustomKeys, input, useFrame, usePress } from '../input'
 import { isMuted, setMuted, sfx } from '../sound'
 import { getLog, getStock, resetAll, setStock } from '../prizes'
 import { PRIZE_STOCK } from '../config'
@@ -8,9 +8,9 @@ import { PRIZE_STOCK } from '../config'
 const RESET_HOLD = 3000
 const RANKS = Object.keys(PRIZE_STOCK).map(Number)
 // 행: 1~5등 수량, 소리, 전체 초기화, 나가기
-const ROWS = [...RANKS.map((r) => ({ type: 'rank', r })), { type: 'sound' }, { type: 'reset' }, { type: 'exit' }]
+const ROWS = [...RANKS.map((r) => ({ type: 'rank', r })), { type: 'sound' }, { type: 'keys' }, { type: 'reset' }, { type: 'exit' }]
 
-export default function Staff({ onExit }) {
+export default function Staff({ onExit, onKeys }) {
   const [row, setRow] = useState(0)
   const [stock, setLocalStock] = useState(getStock)
   const [log, setLog] = useState(getLog)
@@ -45,6 +45,7 @@ export default function Staff({ onExit }) {
       setMuted(!muted)
       setMutedState(!muted)
     }
+    if (a === 'a' && cur.type === 'keys') onKeys()
     if (a === 'a' && cur.type === 'exit') onExit()
     if (a === 'b') onExit()
   })
@@ -83,6 +84,14 @@ export default function Staff({ onExit }) {
                   <span>전체 초기화 ( <Key k="a" /> 3초 꾹 )</span>
                   <span style={{ width: 160, height: 14, border: '2px solid var(--ink)', borderRadius: 6, overflow: 'hidden', background: '#fff' }}>
                     <span style={{ display: 'block', width: `${resetP * 100}%`, height: '100%', background: 'var(--coral)' }} />
+                  </span>
+                </>
+              )}
+              {it.type === 'keys' && (
+                <>
+                  <span>키패드 설정</span>
+                  <span style={{ fontSize: 16, color: 'var(--ink-soft)' }}>
+                    {Object.keys(getCustomKeys()).length ? '등록됨' : '기본 키'} ▶
                   </span>
                 </>
               )}

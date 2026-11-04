@@ -6,6 +6,7 @@ import StrawberryGame from './scenes/StrawberryGame'
 import BalloonGame from './scenes/BalloonGame'
 import Postcard from './scenes/Postcard'
 import Staff from './scenes/Staff'
+import KeySetup from './scenes/KeySetup'
 import { startBgm } from './sound'
 
 const PRELOAD = [
@@ -20,7 +21,7 @@ const PRELOAD = [
 ]
 
 export default function App() {
-  const [scene, setScene] = useState({ name: 'title', n: 0 })
+  const [scene, setScene] = useState({ name: location.hash === '#keys' ? 'keys' : 'title', n: 0 })
   const [closed, setClosed] = useState(false)
   const busy = useRef(false)
 
@@ -61,7 +62,10 @@ export default function App() {
       view = <Postcard result={scene.props.result} onDone={toTitle} />
       break
     case 'staff':
-      view = <Staff onExit={toTitle} />
+      view = <Staff onExit={toTitle} onKeys={() => go('keys')} />
+      break
+    case 'keys':
+      view = <KeySetup onExit={toTitle} />
       break
     default:
       view = <Title onStart={(id) => go(id)} onStaff={() => go('staff')} />

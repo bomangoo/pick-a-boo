@@ -1,10 +1,62 @@
 import { useEffect, useRef } from 'react'
 import { KEYMAP } from './config'
 
+export const ACTIONS = ['up', 'down', 'left', 'right', 'a', 'b']
+const CUSTOM_KEY = 'pickaboo.keymap.v1'
+
 // 키 코드 → 액션(up/down/left/right/a/b)
-const CODE_TO_ACTION = {}
-for (const [action, codes] of Object.entries(KEYMAP)) {
-  for (const code of codes) CODE_TO_ACTION[code] = action
+// 기본 매핑(config.js) 위에, 현장 키패드로 '키 설정'에서 저장한 매핑을 덮어씁니다.
+let CODE_TO_ACTION = {}
+function rebuild() {
+  const map = {}
+  for (const [action, codes] of Object.entries(KEYMAP)) {
+    for (const code of codes) map[code] = action
+  }
+  const custom = getCustomKeys()
+  for (const [action, code] of Object.entries(custom)) if (code) map[code] = action
+  CODE_TO_ACTION = map
+}
+
+export function getCustomKeys() {
+  try {
+    return JSON.parse(localStorage.getItem(CUSTOM_KEY)) || {}
+  } catch {
+    return {}
+  }
+}
+
+export function saveCustomKeys(map) {
+  try {
+    localStorage.setItem(CUSTOM_KEY, JSON.stringify(map))
+  } catch {
+    /* noop */
+  }
+  rebuild()
+}
+
+export function clearCustomKeys() {
+  try {
+    localStorage.removeItem(CUSTOM_KEY)
+  } catch {
+    /* noop */
+  }
+  rebuild()
+}
+
+rebuild()
+
+// 키패드에 따라 code 가 비어 있을 수 있어서 key 로 대신합니다.
+const keyId = (e) => e.code || e.key
+const MODIFIERS = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Fn']
+const isModifier = (e) => MODIFIERS.some((m) => e.key === m || (e.code || '').startsWith(m))
+
+// '키 설정' 화면이 다음 키 입력을 가로챌 때 사용합니다.
+let capture = null
+export function captureNextKey(fn) {
+  capture = fn
+  return () => {
+    if (capture === fn) capture = null
+  }
 }
 
 const held = { up: false, down: false, left: false, right: false, a: false, b: false }
@@ -18,7 +70,15 @@ function emit(action) {
 }
 
 function onKeyDown(e) {
-  const action = CODE_TO_ACTION[e.code]
+  if (capture) {
+    e.preventDefault()
+    if (e.repeat || isModifier(e)) return
+    const fn = capture
+    capture = null
+    fn(keyId(e), e)
+    return
+  }
+  const action = CODE_TO_ACTION[keyId(e)]
   if (!action) return
   e.preventDefault()
   if (e.repeat || held[action]) return
@@ -28,7 +88,7 @@ function onKeyDown(e) {
 }
 
 function onKeyUp(e) {
-  const action = CODE_TO_ACTION[e.code]
+  const action = CODE_TO_ACTION[keyId(e)]
   if (!action) return
   held[action] = false
   heldSince[action] = null
